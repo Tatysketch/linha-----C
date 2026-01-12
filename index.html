@@ -2,84 +2,112 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Escala de Bancadas - Meli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Bancadas Meli</title>
     <style>
-        body { font-family: sans-serif; background-color: #fff159; padding: 20px; }
-        .container { background: white; padding: 20px; border-radius: 8px; max-width: 400px; margin: auto; }
-        h2 { text-align: center; color: #333; }
-        .linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        .bancada { font-weight: bold; color: #2d3277; }
-        button { width: 100%; padding: 10px; background: #2d3277; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        /* ESTILO DO SEU SITE ORIGINAL */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fff159; margin: 0; padding: 20px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .main-container { display: flex; justify-content: space-around; max-width: 1000px; margin: auto; gap: 20px; }
+        .coluna { flex: 1; background: #f5f5f5; border-radius: 10px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card-bancada { background: white; margin-bottom: 10px; padding: 10px; border-radius: 5px; border-left: 5px solid #2d3277; display: flex; justify-content: space-between; align-items: center; }
+        .info-setor { display: flex; flex-direction: column; }
+        .categoria { font-size: 0.8em; color: #666; font-weight: bold; }
+        .bancada-nome { font-weight: bold; color: #2d3277; }
+        .colaborador-nome { font-size: 1.1em; font-weight: 600; color: #333; }
+        .gm-tag { font-size: 0.7em; background: #2d3277; color: white; padding: 2px 6px; border-radius: 3px; margin-top: 4px; display: inline-block; }
+        button { display: block; width: 250px; margin: 20px auto; padding: 15px; background: #2d3277; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; }
         button:hover { background: #1e2150; }
-        .aviso { font-size: 0.8em; color: #666; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Escala Meli</h2>
-    <div id="tabela-escala"></div>
-    <button onclick="gerarEExibirEscala()">Gerar Nova Escala</button>
-    <p class="aviso">Obs: Dulce e Tati nunca caem na Pesca.</p>
+<div class="header">
+    <h1>Operação Mercado Livre - Bancadas</h1>
 </div>
 
+<div class="main-container">
+    <div class="coluna" id="coluna-esquerda"></div>
+    <div class="coluna" id="coluna-direita"></div>
+</div>
+
+<button onclick="gerarEscalaMeli()">Gerar Nova Escala de Hoje</button>
+
 <script>
-// 1. LISTA ATUALIZADA DOS COLABORADORES
-const colaboradores = [
-    "Adrian", "Cris", "Dulce", "Alex", "Cleyton", 
-    "Kerolen", "Karol de Oliveira", "Karol Rocha", 
-    "Laura", "Leticia", "Thais", "Tati", "Neuza", "Samuel"
+// LISTA ATUALIZADA (14 NOMES)
+const nomesOriginal = [
+    "Adrian", "Cris", "Dulce", "Alex", "laura", 
+    "Kerolen", "Karol rocha", "leticia", 
+    "cleyton", "karol de oliveira", "thais", "Tati", "Neuza", "Samuel"
 ];
 
-// 2. LISTA DE BANCADAS
-const bancadas = [
-    "Pesca", "Bancada 02", "Bancada 03", "Bancada 04", "Bancada 05", 
-    "Bancada 06", "Bancada 07", "Bancada 08", "Bancada 09", "Bancada 10",
-    "Bancada 11", "Bancada 12", "Bancada 13", "Bancada 14"
+// CONFIGURAÇÃO DAS BANCADAS (CATEGORIAS E GMs)
+const configBancadas = [
+    { id: "Pesca", cat: "PESCA / CAMPING", gm: "GM 01", lado: "esq" },
+    { id: "Bancada 02", cat: "ELETRÔNICOS", gm: "GM 01", lado: "esq" },
+    { id: "Bancada 03", cat: "ELETRÔNICOS", gm: "GM 01", lado: "esq" },
+    { id: "Bancada 04", cat: "MODA", gm: "GM 02", lado: "esq" },
+    { id: "Bancada 05", cat: "MODA", gm: "GM 02", lado: "esq" },
+    { id: "Bancada 06", cat: "MODA", gm: "GM 02", lado: "esq" },
+    { id: "Bancada 07", cat: "CASA / COZINHA", gm: "GM 03", lado: "esq" },
+    { id: "Bancada 08", cat: "CASA / COZINHA", gm: "GM 03", lado: "dir" },
+    { id: "Bancada 09", cat: "BRINQUEDOS", gm: "GM 03", lado: "dir" },
+    { id: "Bancada 10", cat: "BRINQUEDOS", gm: "GM 04", lado: "dir" },
+    { id: "Bancada 11", cat: "BELEZA", gm: "GM 04", lado: "dir" },
+    { id: "Bancada 12", cat: "BELEZA", gm: "GM 04", lado: "dir" },
+    { id: "Bancada 13", cat: "OUTROS", gm: "GM 05", lado: "dir" },
+    { id: "Bancada 14", cat: "OUTROS", gm: "GM 05", lado: "dir" }
 ];
 
-function gerarEExibirEscala() {
-    let disponiveis = [...colaboradores];
-    let escalaFinal = [];
+function gerarEscalaMeli() {
+    let disponiveis = [...nomesOriginal];
+    let resultado = {};
 
-    // --- REGRA: SORTEIO DA PESCA (SEM DULCE E TATI) ---
-    const aptosPesca = disponiveis.filter(nome => nome !== "Dulce" && nome !== "Tati");
+    // 1. SORTEIO DA PESCA (BLOQUEIO DULCE E TATI)
+    const aptosPesca = disponiveis.filter(n => n !== "Dulce" && n !== "Tati");
     const sorteadoPesca = aptosPesca[Math.floor(Math.random() * aptosPesca.length)];
-    
-    // Adiciona a Pesca na escala e remove o sorteado da lista geral
-    escalaFinal.push({ bancada: "Pesca", colaborador: sorteadoPesca });
+    resultado["Pesca"] = sorteadoPesca;
     disponiveis.splice(disponiveis.indexOf(sorteadoPesca), 1);
 
-    // --- REGRA: RESTANTE DAS BANCADAS (TUDO LIBERADO) ---
-    // Embaralha o resto da equipe
+    // 2. EMBARALHAR RESTANTE
     disponiveis.sort(() => Math.random() - 0.5);
 
-    for (let i = 1; i < bancadas.length; i++) {
-        escalaFinal.push({ 
-            bancada: bancadas[i], 
-            colaborador: disponiveis[i-1] 
-        });
-    }
+    // 3. DISTRIBUIR NAS OUTRAS BANCADAS
+    let idx = 0;
+    configBancadas.forEach(b => {
+        if(b.id !== "Pesca") {
+            resultado[b.id] = disponiveis[idx];
+            idx++;
+        }
+    });
 
-    // --- RENDERIZAR NA TELA ---
-    const htmlDiv = document.getElementById("tabela-escala");
-    htmlDiv.innerHTML = ""; // Limpa a tabela anterior
+    // 4. RENDERIZAR NA TELA
+    const colEsq = document.getElementById('coluna-esquerda');
+    const colDir = document.getElementById('coluna-direita');
+    colEsq.innerHTML = ""; colDir.innerHTML = "";
 
-    escalaFinal.forEach(item => {
-        htmlDiv.innerHTML += `
-            <div class="linha">
-                <span class="bancada">${item.bancada}:</span>
-                <span class="nome">${item.colaborador}</span>
+    configBancadas.forEach(b => {
+        const html = `
+            <div class="card-bancada">
+                <div class="info-setor">
+                    <span class="categoria">${b.cat}</span>
+                    <span class="bancada-nome">${b.id}</span>
+                    <span class="gm-tag">${b.gm}</span>
+                </div>
+                <div class="colaborador-nome">${resultado[b.id]}</div>
             </div>
         `;
+        if(b.lado === "esq") colEsq.innerHTML += html;
+        else colDir.innerHTML += html;
     });
 }
 
-// Rodar ao abrir a página
-gerarEExibirEscala();
+// Inicia ao carregar
+gerarEscalaMeli();
 </script>
 
 </body>
 </html>
+
 
 
