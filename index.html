@@ -4,28 +4,24 @@
     <meta charset="UTF-8">
     <title>P2M - OPERAÇÃO LOGÍSTICA</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .painel { background: white; width: 950px; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
-        .header { text-align: center; border-bottom: 2px solid #fff159; margin-bottom: 20px; padding-bottom: 10px; }
+        body { font-family: sans-serif; background-color: #ffffff; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .painel { background: white; width: 950px; border-radius: 10px; padding: 20px; border: 1px solid #ddd; }
+        .header { text-align: center; border-bottom: 2px solid #2d3277; margin-bottom: 20px; padding-bottom: 10px; }
         .header h1 { color: #2d3277; margin: 0; font-size: 24px; }
-        .header p { color: #666; margin: 5px 0; font-weight: bold; font-size: 14px; }
         
-        .colunas-container { display: flex; justify-content: space-between; position: relative; }
+        .colunas-container { display: flex; justify-content: space-between; align-items: flex-start; }
         .coluna { width: 420px; }
-        .col-titulo { text-align: center; font-weight: bold; color: #333; margin-bottom: 20px; font-size: 14px; }
         
-        /* ESTEIRA CENTRAL */
-        .esteira { width: 40px; background: #333; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px; writing-mode: vertical-rl; text-orientation: mixed; padding: 20px 0; }
+        .esteira { width: 40px; background: #333; height: 520px; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px; writing-mode: vertical-rl; text-orientation: mixed; }
 
-        .card { background: white; border: 1px solid #ddd; border-left: 8px solid #5cb85c; border-radius: 8px; padding: 10px 15px; margin-bottom: 15px; min-height: 50px; display: flex; flex-direction: column; justify-content: center; }
-        .card-info { font-size: 10px; color: #888; font-weight: bold; margin-bottom: 5px; }
+        .card { background: white; border: 1px solid #ddd; border-left: 10px solid #5cb85c; border-radius: 5px; padding: 12px; margin-bottom: 15px; display: flex; flex-direction: column; }
+        .card-info { font-size: 10px; color: #888; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
         .nome-colaborador { color: #2d3277; font-size: 18px; font-weight: bold; }
 
-        /* DESTAQUE PESCA */
-        .card-pesca { border-left: 8px solid #2d3277; border: 2px solid #2d3277; }
+        .card-pesca { border-left: 10px solid #2d3277; }
 
         .footer-btn { text-align: center; margin-top: 20px; }
-        button { background: #2d3277; color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        button { background: #2d3277; color: white; width: 100%; padding: 15px; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -33,30 +29,28 @@
 <div class="painel">
     <div class="header">
         <h1>P2M - OPERAÇÃO LOGÍSTICA</h1>
-        <p>LINHA C - Gestão de Bancadas</p>
+        <p><b>LINHA C - Gestão de Bancadas</b></p>
     </div>
 
     <div class="colunas-container">
         <div class="coluna">
-            <div class="col-titulo">ESQUERDA</div>
-            <div id="slot-1" class="card"><div class="card-info">BANCADA 01 (GM)</div><div class="nome-colaborador" id="n1">---</div></div>
-            <div id="slot-2" class="card"><div class="card-info">BANCADA 02 (GM)</div><div class="nome-colaborador" id="n2">---</div></div>
-            <div id="slot-3" class="card"><div class="card-info">BANCADA 03 (GM)</div><div class="nome-colaborador" id="n3">---</div></div>
-            <div id="slot-4" class="card"><div class="card-info">BANCADA 04 (GM)</div><div class="nome-colaborador" id="n4">---</div></div>
-            <div id="slot-5" class="card"><div class="card-info">BANCADA 05 (GM)</div><div class="nome-colaborador" id="n5">---</div></div>
+            <div class="card"><div class="card-info">BANCADA 01 (GM)</div><div class="nome-colaborador" id="n1">---</div></div>
+            <div class="card"><div class="card-info">BANCADA 02 (GM)</div><div class="nome-colaborador" id="n2">---</div></div>
+            <div class="card"><div class="card-info">BANCADA 03 (GM)</div><div class="nome-colaborador" id="n3">---</div></div>
+            <div class="card"><div class="card-info">BANCADA 04 (GM)</div><div class="nome-colaborador" id="n4">---</div></div>
+            <div class="card"><div class="card-info">BANCADA 05 (GM)</div><div class="nome-colaborador" id="n5">---</div></div>
+            <div class="card"><div class="card-info">BANCADA 06 (GM)</div><div class="nome-colaborador" id="n6">---</div></div>
         </div>
 
         <div class="esteira">ESTEIRA LINHA C</div>
 
         <div class="coluna">
-            <div class="col-titulo">DIREITA</div>
-            <div id="slot-pesca" class="card card-pesca"><div class="card-info">BANCADA 01 (PESCA)</div><div class="nome-colaborador" id="n-pesca">---</div></div>
-            <div id="slot-7" class="card"><div class="card-info">BANCADA 02 (CAT)</div><div class="nome-colaborador" id="n7">---</div></div>
-            <div id="slot-8" class="card"><div class="card-info">BANCADA 03 (CAT)</div><div class="nome-colaborador" id="n8">---</div></div>
-            <div id="slot-9" class="card"><div class="card-info">BANCADA 04 (CAT)</div><div class="nome-colaborador" id="n9">---</div></div>
-            <div id="slot-10" class="card"><div class="card-info">BANCADA 05 (GM)</div><div class="nome-colaborador" id="n10">---</div></div>
-            <div id="slot-11" class="card"><div class="card-info">BANCADA 06 (GM)</div><div class="nome-colaborador" id="n11">---</div></div>
-            <div id="slot-12" class="card"><div class="card-info">BANCADA 07 (GM)</div><div class="nome-colaborador" id="n12">---</div></div>
+            <div class="card card-pesca"><div class="card-info">BANCADA 01 (PESCA)</div><div class="nome-colaborador" id="n-pesca">---</div></div>
+            <div class="card"><div class="card-info">BANCADA 02 (CAT)</div><div class="nome-colaborador" id="n7">VAZIO</div></div>
+            <div class="card"><div class="card-info">BANCADA 03 (CAT)</div><div class="nome-colaborador" id="n8">VAZIO</div></div>
+            <div class="card"><div class="card-info">BANCADA 04 (CAT)</div><div class="nome-colaborador" id="n9">VAZIO</div></div>
+            <div class="card"><div class="card-info">BANCADA 05 (GM)</div><div class="nome-colaborador" id="n10">---</div></div>
+            <div class="card"><div class="card-info">BANCADA 06 (GM)</div><div class="nome-colaborador" id="n11">---</div></div>
         </div>
     </div>
 
@@ -66,44 +60,41 @@
 </div>
 
 <script>
-const colaboradores = [
-    "Adrian", "Cris", "Dulce", "Alex", "Cleyton", 
-    "Kerolen", "Karol de Oliveira", "Karol Rocha", 
-    "Laura", "Leticia", "Thais", "Tati", "Neuza", "Samuel"
-];
+// LISTA DE NOMES
+const colaboradores = ["Adrian", "Cris", "Dulce", "Alex", "Cleyton", "Kerolen", "Karol de Oliveira", "Karol Rocha", "Laura", "Leticia", "Thais", "Tati", "Neuza", "Samuel"];
 
 function gerarRotatividade() {
     let disp = [...colaboradores];
     
-    // 1. PESCA (Dulce e Tati não entram aqui)
+    // 1. SORTEIO PESCA (DULCE E TATI BLOQUEADAS)
     const aptosPesca = disp.filter(n => n !== "Dulce" && n !== "Tati");
     const sorteadoPesca = aptosPesca[Math.floor(Math.random() * aptosPesca.length)];
     document.getElementById('n-pesca').innerText = sorteadoPesca;
     disp.splice(disp.indexOf(sorteadoPesca), 1);
 
-    // 2. RESTANTE (Samuel liberado no sorteio comum)
+    // 2. EMBARALHA O RESTO (SAMUEL INCLUSO NO RODÍZIO)
     disp.sort(() => Math.random() - 0.5);
 
-    // Preenchendo os slots na ordem do seu layout
-    const ids = ['n1', 'n2', 'n3', 'n4', 'n5', 'n7', 'n8', 'n9', 'n10', 'n11', 'n12'];
+    // 3. DISTRIBUI APENAS NAS BANCADAS GM (DEIXANDO CAT VAZIAS)
+    const idsGM = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n10', 'n11'];
     
-    // Como temos 14 nomes e 1 pesca, sobram 13 nomes para 11 slots (alguns cards podem ter 2 nomes como no seu original)
-    // Para manter igual à imagem, vamos colocar 2 nomes nos primeiros slots se necessário
-    document.getElementById('n1').innerText = disp[0];
-    document.getElementById('n2').innerText = disp[1];
-    document.getElementById('n3').innerText = disp[2] + " / " + disp[3];
-    document.getElementById('n4').innerText = disp[4] + " / " + disp[5];
-    document.getElementById('n5').innerText = disp[6] + " / " + disp[7];
-    document.getElementById('n7').innerText = disp[8];
-    document.getElementById('n8').innerText = disp[9];
-    document.getElementById('n9').innerText = disp[10];
-    document.getElementById('n10').innerText = disp[11];
-    document.getElementById('n11').innerText = disp[12];
-    document.getElementById('n12').innerText = "Vago"; // Ajuste conforme a necessidade de pessoas
+    idsGM.forEach((id, i) => {
+        if (disp[i]) {
+            document.getElementById(id).innerText = disp[i];
+        } else {
+            document.getElementById(id).innerText = "Vago";
+        }
+    });
+
+    // 4. MANTÉM CATEGORIAS VAZIAS
+    document.getElementById('n7').innerText = "VAZIO";
+    document.getElementById('n8').innerText = "VAZIO";
+    document.getElementById('n9').innerText = "VAZIO";
 }
 
+// GERA AO ABRIR O SITE
 window.onload = gerarRotatividade;
 </script>
+
 </body>
 </html>
-
