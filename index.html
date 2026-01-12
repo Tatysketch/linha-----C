@@ -60,43 +60,52 @@
 </div>
 
 <script>
-// LISTA DE NOMES COMPLETA
 const colaboradores = ["Adrian", "Cris", "Dulce", "Alex", "Cleyton", "Kerolen", "Karol de Oliveira", "Karol Rocha", "Laura", "Leticia", "Thais", "Tati", "Neuza", "Samuel"];
 
 function gerarRotatividade() {
     let disp = [...colaboradores];
-    
-    // 1. SORTEIO PESCA: Samuel pode cair aqui, Dulce e Tati NÃO.
+    const idsGM = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n10', 'n11'];
+    idsGM.forEach(id => document.getElementById(id).innerText = "");
+
+    // 1. Pesca (Sem Tati e Dulce)
     const aptosPesca = disp.filter(n => n !== "Dulce" && n !== "Tati");
     const sorteadoPesca = aptosPesca[Math.floor(Math.random() * aptosPesca.length)];
     document.getElementById('n-pesca').innerText = sorteadoPesca;
-    
-    // Remove quem foi para a pesca da lista de sorteio do restante
     disp.splice(disp.indexOf(sorteadoPesca), 1);
 
-    // 2. EMBARALHA O RESTANTE (Samuel está aqui se não foi sorteado na pesca)
+    // 2. Embaralha o resto
     disp.sort(() => Math.random() - 0.5);
 
-    // 3. DISTRIBUI APENAS NAS BANCADAS GM
-    const idsGM = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n10', 'n11'];
+    // 3. Distribuição respeitando Tati sozinha
+    let distribuicao = {};
+    idsGM.forEach(id => distribuicao[id] = []);
+
+    // Primeiro aloca a Tati sozinha
+    if (disp.includes("Tati")) {
+        const idTati = idsGM[Math.floor(Math.random() * idsGM.length)];
+        distribuicao[idTati].push("Tati");
+        disp.splice(disp.indexOf("Tati"), 1);
+    }
+
+    // Distribui o restante nas bancadas que NÃO têm a Tati
+    let idsDisponiveisParaDuplas = idsGM.filter(id => !distribuicao[id].includes("Tati"));
     
-    idsGM.forEach((id, i) => {
-        if (disp[i]) {
-            document.getElementById(id).innerText = disp[i];
-        } else {
-            document.getElementById(id).innerText = "Vago";
-        }
+    disp.forEach((nome, index) => {
+        const idAlvo = idsDisponiveisParaDuplas[index % idsDisponiveisParaDuplas.length];
+        distribuicao[idAlvo].push(nome);
     });
 
-    // 4. MANTÉM CATEGORIAS SEMPRE VAZIAS
+    // Renderiza nas bancadas
+    idsGM.forEach(id => {
+        document.getElementById(id).innerText = distribuicao[id].join(" / ");
+    });
+
     document.getElementById('n7').innerText = "VAZIO";
     document.getElementById('n8').innerText = "VAZIO";
     document.getElementById('n9').innerText = "VAZIO";
 }
 
-// Inicia a escala ao carregar a página
 window.onload = gerarRotatividade;
 </script>
-
 </body>
 </html>
