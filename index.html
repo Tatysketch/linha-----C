@@ -1,39 +1,92 @@
+O código que te mandei é a lógica central (o "motor" do sorteio), mas para ele funcionar no seu site, ele precisa estar conectado à sua interface (ao que as pessoas veem na tela).
+
+Como eu não tenho acesso ao seu arquivo original, eu preparei abaixo o código completo e pronto para uso (HTML + JavaScript). Ele já inclui a lista correta dos 14 nomes e a trava de segurança para a Dulce e a Tati.
+
+Você pode copiar e salvar isso como um arquivo .html para testar agora mesmo:
+
+HTML
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Escala de Bancadas - Meli</title>
+    <style>
+        body { font-family: sans-serif; background-color: #fff159; padding: 20px; }
+        .container { background: white; padding: 20px; border-radius: 8px; max-width: 400px; margin: auto; }
+        h2 { text-align: center; color: #333; }
+        .linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .bancada { font-weight: bold; color: #2d3277; }
+        button { width: 100%; padding: 10px; background: #2d3277; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #1e2150; }
+        .aviso { font-size: 0.8em; color: #666; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Escala Meli</h2>
+    <div id="tabela-escala"></div>
+    <button onclick="gerarEExibirEscala()">Gerar Nova Escala</button>
+    <p class="aviso">Obs: Dulce e Tati nunca caem na Pesca.</p>
+</div>
+
+<script>
+// 1. LISTA ATUALIZADA DOS COLABORADORES
 const colaboradores = [
     "Adrian", "Cris", "Dulce", "Alex", "Cleyton", 
     "Kerolen", "Karol de Oliveira", "Karol Rocha", 
     "Laura", "Leticia", "Thais", "Tati", "Neuza", "Samuel"
 ];
 
-// Supondo que as bancadas tenham nomes ou números
-const bancadas = ["Pesca", "Bancada 2", "Bancada 3", "Bancada 4", "Bancada 5", "Bancada 6", "Bancada 7", "Bancada 8", "Bancada 9", "Bancada 10", "Bancada 11", "Bancada 12", "Bancada 13", "Bancada 14"];
+// 2. LISTA DE BANCADAS
+const bancadas = [
+    "Pesca", "Bancada 02", "Bancada 03", "Bancada 04", "Bancada 05", 
+    "Bancada 06", "Bancada 07", "Bancada 08", "Bancada 09", "Bancada 10",
+    "Bancada 11", "Bancada 12", "Bancada 13", "Bancada 14"
+];
 
-function gerarEscala() {
+function gerarEExibirEscala() {
     let disponiveis = [...colaboradores];
-    let escala = {};
+    let escalaFinal = [];
 
-    // --- PASSO 1: DEFINIR A PESCA (COM RESTRIÇÃO) ---
-    // Criamos uma lista de quem PODE ir para a pesca
-    const aptosParaPesca = disponiveis.filter(nome => nome !== "Dulce" && nome !== "Tati");
+    // --- REGRA: SORTEIO DA PESCA (SEM DULCE E TATI) ---
+    const aptosPesca = disponiveis.filter(nome => nome !== "Dulce" && nome !== "Tati");
+    const sorteadoPesca = aptosPesca[Math.floor(Math.random() * aptosPesca.length)];
     
-    // Sorteamos um nome dessa lista filtrada
-    const escolhidoPesca = aptosParaPesca[Math.floor(Math.random() * aptosParaPesca.length)];
-    
-    // Registramos na escala e tiramos a pessoa da lista global de disponíveis
-    escala["Pesca"] = escolhidoPesca;
-    disponiveis.splice(disponiveis.indexOf(escolhidoPesca), 1);
+    // Adiciona a Pesca na escala e remove o sorteado da lista geral
+    escalaFinal.push({ bancada: "Pesca", colaborador: sorteadoPesca });
+    disponiveis.splice(disponiveis.indexOf(sorteadoPesca), 1);
 
-    // --- PASSO 2: DISTRIBUIR O RESTANTE ---
-    // Embaralha o restante da equipe (incluindo Dulce, Tati e Samuel)
+    // --- REGRA: RESTANTE DAS BANCADAS (TUDO LIBERADO) ---
+    // Embaralha o resto da equipe
     disponiveis.sort(() => Math.random() - 0.5);
 
-    // Preenche as outras 13 bancadas
-    const outrasBancadas = bancadas.filter(b => b !== "Pesca");
-    outrasBancadas.forEach((bancada, i) => {
-        escala[bancada] = disponiveis[i];
-    });
+    for (let i = 1; i < bancadas.length; i++) {
+        escalaFinal.push({ 
+            bancada: bancadas[i], 
+            colaborador: disponiveis[i-1] 
+        });
+    }
 
-    return escala;
+    // --- RENDERIZAR NA TELA ---
+    const htmlDiv = document.getElementById("tabela-escala");
+    htmlDiv.innerHTML = ""; // Limpa a tabela anterior
+
+    escalaFinal.forEach(item => {
+        htmlDiv.innerHTML += `
+            <div class="linha">
+                <span class="bancada">${item.bancada}:</span>
+                <span class="nome">${item.colaborador}</span>
+            </div>
+        `;
+    });
 }
 
-console.log(gerarEscala());
+// Rodar ao abrir a página
+gerarEExibirEscala();
+</script>
+
+</body>
+</html>
 
