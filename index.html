@@ -60,22 +60,24 @@
 </div>
 
 <script>
-// LISTA DE NOMES
+// LISTA DE NOMES COMPLETA
 const colaboradores = ["Adrian", "Cris", "Dulce", "Alex", "Cleyton", "Kerolen", "Karol de Oliveira", "Karol Rocha", "Laura", "Leticia", "Thais", "Tati", "Neuza", "Samuel"];
 
 function gerarRotatividade() {
     let disp = [...colaboradores];
     
-    // 1. SORTEIO PESCA (DULCE E TATI BLOQUEADAS)
+    // 1. SORTEIO PESCA: Samuel pode cair aqui, Dulce e Tati NÃO.
     const aptosPesca = disp.filter(n => n !== "Dulce" && n !== "Tati");
     const sorteadoPesca = aptosPesca[Math.floor(Math.random() * aptosPesca.length)];
     document.getElementById('n-pesca').innerText = sorteadoPesca;
+    
+    // Remove quem foi para a pesca da lista de sorteio do restante
     disp.splice(disp.indexOf(sorteadoPesca), 1);
 
-    // 2. EMBARALHA O RESTO (SAMUEL INCLUSO NO RODÍZIO)
+    // 2. EMBARALHA O RESTANTE (Samuel está aqui se não foi sorteado na pesca)
     disp.sort(() => Math.random() - 0.5);
 
-    // 3. DISTRIBUI APENAS NAS BANCADAS GM (DEIXANDO CAT VAZIAS)
+    // 3. DISTRIBUI APENAS NAS BANCADAS GM
     const idsGM = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n10', 'n11'];
     
     idsGM.forEach((id, i) => {
@@ -86,13 +88,13 @@ function gerarRotatividade() {
         }
     });
 
-    // 4. MANTÉM CATEGORIAS VAZIAS
+    // 4. MANTÉM CATEGORIAS SEMPRE VAZIAS
     document.getElementById('n7').innerText = "VAZIO";
     document.getElementById('n8').innerText = "VAZIO";
     document.getElementById('n9').innerText = "VAZIO";
 }
 
-// GERA AO ABRIR O SITE
+// Inicia a escala ao carregar a página
 window.onload = gerarRotatividade;
 </script>
 
